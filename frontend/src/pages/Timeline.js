@@ -51,6 +51,7 @@ export default class Timeline extends Component {
     if ( e.keyCode !== 13 ) return;
 
     const content = this.state.newTweet;
+    
     const author = localStorage.getItem("@GoTwitter:username");
 
     await api.post('tweets', { content, author });
