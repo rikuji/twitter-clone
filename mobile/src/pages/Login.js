@@ -1,11 +1,50 @@
 import React, { Component } from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
 
-import {KeyboardAvoidingView ,View,TextInput,TouchableOpacity, StyleSheet } from 'react-native';
+import { KeyboardAvoidingView, View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class Login extends Component {
+  state = {
+    username: ''
+  };
+
+  handleInputChange = (username) => {
+    this.setState({ username });
+  };
+
+  handleLogin = async () => {
+    const { username } = this.state;
+
+    if (!username.length) return;
+
+    await AsyncStorage.setItem('@Omnistack:user', username);
+    
+    this.props.navigation.navigate('Timeline');
+  };
+
   render () {
     return (
-      <View style={styles.container} />
+      <KeyboardAvoidingView behavior="padding" style={styles.container}>
+        <View style={styles.content}>
+          <Text>
+            <Icon name="twitter" size={64} color="#4BB0EE" />
+          </Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Nome do usuário"
+            value={this.state.username}
+            onChangeText={this.handleInputChange}
+            onSubmitEditing={this.handleLogin}
+            returnKeyType="send"
+          />
+
+          <TouchableOpacity onPress={() => { this.handleLogin }} style={styles.button}>
+            <Text style={styles.buttonText}>Entrar</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
     )
   }
 }
